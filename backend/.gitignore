@@ -1,0 +1,39 @@
+# --- 1. Virtual Environment ---
+# Ignore the virtual environment folder to avoid uploading thousands of library files
+.venv/
+venv/
+env/
+
+# --- 2. Python Bytecode ---
+# Ignore compiled python files (these are auto-generated)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- 3. Environment Variables (Secrets) ---
+# CRITICAL: This hides your API Keys and secrets from the public
+.env
+
+# --- 4. Database ---
+# Ignore the local database so user data is not uploaded to GitHub
+easyeye.db
+*.db
+*.sqlite3
+
+# --- 5. User Generated Content ---
+# Ignore the static/uploads folder because it contains user PDFs and images.
+# The app creates these folders automatically when running.
+backend/static/
+static/
+uploads/
+avatars/
+
+# --- 6. Operating System Files ---
+# Ignore system-generated junk files
+.DS_Store
+Thumbs.db
+
+# --- 7. IDE Settings (Optional) ---
+# Ignore editor-specific settings
+.vscode/
+.idea/

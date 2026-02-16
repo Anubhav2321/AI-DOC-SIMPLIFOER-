@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyEye - Cyber Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <div class="profile-widget" onclick="toggleProfile()">
+        <span id="topUserName">GUEST</span>
+        <div class="profile-pic">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZmZmZiIvPjwvc3ZnPg==" alt="User" id="userAvatar">
+        </div>
+    </div>
+
+    <div class="brand-logo-container">
+        <div class="logo-icon"><i class="fa-solid fa-eye"></i></div>
+        <h1>EASY<span class="highlight">EYE</span></h1>
+    </div>
+
+    <div id="profileModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-inner">
+                <span class="close-btn" onclick="toggleProfile()">&times;</span>
+                
+                <div class="profile-header">
+                    <div class="avatar-large-container">
+                        <div class="avatar-large">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZmZmZiIvPjwvc3ZnPg==" alt="User" id="modalAvatar">
+                        </div>
+                        <div class="edit-avatar-btn" onclick="triggerFileUpload()" title="Upload Photo">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
+                        <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="uploadAvatar()">
+                    </div>
+                    
+                    <h2 id="pName">User Name</h2>
+                    <p id="pEmail" class="email-text">loading...</p>
+                    
+                    <div class="stats-row">
+                        <div class="stat-box">
+                            <span id="pTotal">0</span>
+                            <small>Docs Scanned</small>
+                        </div>
+                        <div class="stat-box">
+                            <span id="pCredits">∞</span>
+                            <small>Pro Credits</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cloud-history-section">
+                    <h3><i class="fa-solid fa-microchip"></i> Cloud Database</h3>
+                    <div id="cloudList" class="cloud-list"></div>
+                </div>
+                
+                <button onclick="handleLogout()" class="logout-btn-large">
+                    <i class="fa-solid fa-power-off"></i> System Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="authOverlay" class="auth-overlay">
+        <div class="auth-card" id="authCard">
+            <div class="brand-logo-container" style="margin-bottom: 10px; transform: scale(0.7);">
+                <div class="logo-icon"><i class="fa-solid fa-eye"></i></div>
+                <h1>EASY<span class="highlight">EYE</span></h1>
+            </div>
+            
+            <div id="loginForm">
+                <h3 style="margin-bottom: 20px; color: #ccc;">LOGIN</h3>
+                <form onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="loginEmail" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="password" id="loginPass" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">ENTER</button>
+                </form>
+                <p style="margin-top: 15px; font-size: 0.8rem; color: #888;">New? <span onclick="switchAuth('signup')" style="color: var(--primary-cyan); cursor: pointer;">Register</span></p>
+            </div>
+
+            <div id="signupForm" class="hidden">
+                <h3 style="margin-bottom: 20px; color: #ccc;">REGISTER</h3>
+                <form onsubmit="handleSignup(event)">
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="regName" placeholder="Name" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="regPass" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">CREATE</button>
+                </form>
+                <p style="margin-top: 15px; font-size: 0.8rem; color: #888;">Existing? <span onclick="switchAuth('login')" style="color: var(--primary-cyan); cursor: pointer;">Login</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainApp" class="main-container blur-content">
+        <div class="white-card">
+            <div class="upload-zone" id="dropZone">
+                <div class="icon-container"><i class="fa-solid fa-file-shield"></i></div>
+                <h3>UPLOAD PDF</h3>
+                <input type="file" id="pdfFile" accept=".pdf" hidden>
+                <label for="pdfFile" class="upload-btn">SELECT FILE</label>
+                <div id="fileName" class="file-name-display"></div>
+            </div>
+
+            <div class="options-grid">
+                <div class="option-box">
+                    <label>OUTPUT LANGUAGE</label>
+                    <select id="languageSelect">
+                        <optgroup label="Popular">
+                            <option value="Bengali">Bengali (বাংলা)</option>
+                            <option value="English">English</option>
+                            <option value="Hindi">Hindi (हिंदी)</option>
+                            <option value="Spanish">Spanish (Español)</option>
+                        </optgroup>
+                        <optgroup label="International">
+                            <option value="French">French (Français)</option>
+                            <option value="German">German (Deutsch)</option>
+                            <option value="Japanese">Japanese (日本語)</option>
+                            <option value="Chinese">Chinese (中文)</option>
+                            <option value="Arabic">Arabic (العربية)</option>
+                            <option value="Russian">Russian (Русский)</option>
+                            <option value="Portuguese">Portuguese (Português)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="option-box">
+                    <label>ANALYSIS MODE</label>
+                    <select id="modeSelect">
+                        <optgroup label="Standard">
+                            <option value="Simple">Simple Summary</option>
+                            <option value="Bullet">Bullet Points</option>
+                            <option value="Professional">Professional / Corporate</option>
+                        </optgroup>
+                        <optgroup label="Creative & Special">
+                            <option value="Child">Explain Like I'm 5</option>
+                            <option value="Funny">Funny / Sarcastic</option>
+                            <option value="Poem">Poem / Creative</option>
+                        </optgroup>
+                        <optgroup label="Technical">
+                            <option value="Legal">Legal Analysis</option>
+                            <option value="Medical">Medical / Health</option>
+                            <option value="Academic">Academic / Research</option>
+                            <option value="Code">Programming / Code Logic</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <button id="simplifyBtn" class="main-action-btn" onclick="simplifyDoc()">ANALYZE</button>
+            
+            <div id="loading" class="hidden" style="text-align: center; margin-top: 20px; color: var(--primary-cyan);">
+                <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2rem;"></i>
+                <p>PROCESSING...</p>
+            </div>
+            
+            <div id="resultSection" class="hidden">
+                <div class="result-header">
+                    <span>OUTPUT</span>
+                    <div class="action-buttons">
+                        <button class="audio-btn" id="playBtn" onclick="toggleSpeech()" title="Read Aloud">
+                            <i class="fa-solid fa-volume-high"></i> LISTEN
+                        </button>
+                        <button class="copy-btn" onclick="copyText()" title="Copy Text">
+                            <i class="fa-regular fa-copy"></i> COPY
+                        </button>
+                    </div>
+                </div>
+                <div id="outputContent"></div>
+            </div>
+            
+            <div class="history-section" style="margin-top: 30px;">
+                <h3 style="color: #666; font-size: 0.8rem;">HISTORY</h3>
+                <div id="historyList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
