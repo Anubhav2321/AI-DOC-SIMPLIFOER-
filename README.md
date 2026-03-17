@@ -12,12 +12,7 @@
   <img src="https://img.shields.io/badge/Status-Active-brightgreen.svg" alt="Status">
 </p>
 
----
 
-## 🚀 Live Demo
-> **Try the application here:** [Insert your Render Live Link Here]
-
----
 
 ## ✨ Key Features
 
